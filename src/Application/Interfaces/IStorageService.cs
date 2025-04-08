@@ -2,5 +2,7 @@ namespace MediaService.Src.Application.Interfaces;
 
 public interface IStorageService
 {
-    Task<string> UploadImageAsync(IFormFile file, string bucketKey, string folderName);
+    Task<object> UploadImageAsync(IFormFile file, string bucketKey, string folderName);
+
+    Task<bool> DeleteImageAsync(string bucketKey, string fileId, string fileName);
 }

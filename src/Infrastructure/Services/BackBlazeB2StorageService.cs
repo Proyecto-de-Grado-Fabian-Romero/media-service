@@ -27,7 +27,7 @@ public class BackblazeB2StorageService : IStorageService
         _b2Client = new B2Client(config);
     }
 
-    public async Task<string> UploadImageAsync(IFormFile file, string bucketKey, string folder)
+    public async Task<object> UploadImageAsync(IFormFile file, string bucketKey, string folder)
     {
         if (!_bucketMap.TryGetValue(bucketKey, out string? bucketName))
         {
@@ -36,6 +36,7 @@ public class BackblazeB2StorageService : IStorageService
 
         var buckets = await _b2Client.Buckets.GetList();
         var bucket = buckets.FirstOrDefault(b => b.BucketName == bucketName) ?? throw new Exception("Bucket not found");
+
         using var memoryStream = new MemoryStream();
         await file.CopyToAsync(memoryStream);
         byte[] fileBytes = memoryStream.ToArray();
@@ -45,6 +46,33 @@ public class BackblazeB2StorageService : IStorageService
 
         var uploadedFile = await _b2Client.Files.Upload(fileBytes, fileName, bucket.BucketId);
 
-        return uploadedFile?.FileName ?? "Upload failed";
+        if (uploadedFile != null)
+        {
+            return new { uploadedFile.FileId, FileName = fileName };
+        }
+
+        return new { Message = "Upload failed" };
+    }
+
+    public async Task<bool> DeleteImageAsync(string bucketKey, string fileId, string fileName)
+    {
+        if (!_bucketMap.TryGetValue(bucketKey, out string? bucketName))
+        {
+            throw new Exception("Invalid bucket key");
+        }
+
+        try
+        {
+            var buckets = await _b2Client.Buckets.GetList();
+            var bucket = buckets.FirstOrDefault(b => b.BucketName == bucketName) ?? throw new Exception("Bucket not found");
+
+            await _b2Client.Files.Delete(fileId, fileName);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error deleting file: {ex.Message}");
+        }
     }
 }
