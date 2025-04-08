@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  mediaservice:
+    build: .
+    container_name: mediaservice
+    ports:
+      - "8080:80" 
+    environment:
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_SERVICE_URL=${AWS_SERVICE_URL}
+      - AWS_BUCKET_PROP=${AWS_BUCKET_PROP}
+      - AWS_BUCKET_REC=${AWS_BUCKET_REC}
+    networks:
+      - mediaservice-network
+
+networks:
+  mediaservice-network:
+    driver: bridge
