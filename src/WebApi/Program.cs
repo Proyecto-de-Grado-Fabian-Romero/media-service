@@ -16,6 +16,16 @@ builder.Services.AddScoped<IStorageService, BackblazeB2StorageService>();
 builder.Services.Configure<StorageSettings>(builder.Configuration.GetSection("StorageSettings"));
 builder.Services.Configure<BackBlazeCredentials>(builder.Configuration.GetSection("BackBlazeCredentials"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 app.MapControllers();
 

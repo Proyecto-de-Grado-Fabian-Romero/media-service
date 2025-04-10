@@ -29,4 +29,7 @@
   <ItemGroup>
     <AdditionalFiles Include=".editorconfig" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src/Application/Commands/" />
+  </ItemGroup>
 </Project>

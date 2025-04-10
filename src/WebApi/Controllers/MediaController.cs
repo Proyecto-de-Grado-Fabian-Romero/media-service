@@ -83,4 +83,22 @@ public class MediaController(IStorageService storageService) : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+
+    [HttpGet("get")]
+    public async Task<IActionResult> GetUrl(
+        [FromQuery] string fileId,
+        [FromQuery] string fileName,
+        [FromQuery] string bucket = "spacio")
+    {
+        try
+        {
+            var url = await _storageService.GetPresignedUrlAsync(bucket, fileId, fileName);
+            return Ok(new { url });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
