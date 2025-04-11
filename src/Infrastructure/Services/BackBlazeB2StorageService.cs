@@ -78,7 +78,7 @@ public class BackblazeB2StorageService : IStorageService
         }
     }
 
-    public async Task<string> GetPresignedUrlAsync(string bucketKey, string fileId, string fileName, int validDurationInSeconds = 7200)
+    public async Task<string> GetPresignedUrlAsync(string bucketKey, string fileName, int validDurationInSeconds = 7200)
     {
         if (!_bucketMap.TryGetValue(bucketKey, out string? bucketName))
         {

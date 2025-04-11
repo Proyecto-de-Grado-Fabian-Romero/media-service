@@ -6,5 +6,5 @@ public interface IStorageService
 
     Task<bool> DeleteImageAsync(string bucketKey, string fileId, string fileName);
 
-    Task<string> GetPresignedUrlAsync(string bucketKey, string fileId, string fileName, int validDurationInSeconds = 7200);
+    Task<string> GetPresignedUrlAsync(string bucketKey, string fileName, int validDurationInSeconds = 7200);
 }
