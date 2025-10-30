@@ -7,15 +7,23 @@ using MediaService.src.WebApi.Controllers.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder
+    .Configuration.SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile(
+        $"appsettings.{builder.Environment.EnvironmentName}.json",
+        optional: true,
+        reloadOnChange: true
+    )
+    .AddEnvironmentVariables();
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(options =>
-    {
-        options.Filters.Add<GlobalExceptionFilter>();
-    });
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 builder.Services.AddScoped<IStorageService, BackblazeB2StorageService>();
 builder.Services.AddScoped<IUploadImageCommand, UploadImageCommand>();
 builder.Services.AddScoped<IDeleteImageCommand, DeleteImageCommand>();
@@ -23,25 +31,60 @@ builder.Services.AddScoped<IUploadMultipleImagesCommand, UploadMultipleImagesCom
 builder.Services.AddScoped<IGetImageUrlCommand, GetImageUrlCommand>();
 
 builder.Services.Configure<StorageSettings>(builder.Configuration.GetSection("StorageSettings"));
-builder.Services.Configure<BackBlazeCredentials>(builder.Configuration.GetSection("BackBlazeCredentials"));
+builder.Services.Configure<BackBlazeCredentials>(
+    builder.Configuration.GetSection("BackBlazeCredentials")
+);
+
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy(
+        "AllowFrontend",
+        policy =>
+        {
+            if (allowedOrigins != null && allowedOrigins.Length > 0)
+            {
+                policy
+                    .WithOrigins(allowedOrigins)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            }
+            else
+            {
+                policy
+                    .WithOrigins("http://localhost:3000", "https://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            }
+        });
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowEnvironments",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5150")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        }
+    );
 });
 
 var app = builder.Build();
 app.MapControllers();
+app.UseCors("AllowEnvironments");
+app.UseCors("AllowFrontEnd");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
