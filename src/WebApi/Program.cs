@@ -62,24 +62,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(
-        "AllowEnvironments",
-        policy =>
-        {
-            policy
-                .WithOrigins("http://localhost:5150")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-        }
-    );
-});
-
 var app = builder.Build();
 app.MapControllers();
-app.UseCors("AllowEnvironments");
 app.UseCors("AllowFrontEnd");
 
 // Configure the HTTP request pipeline.
