@@ -1,9 +1,9 @@
-using MediaService.src.Application.Commands.Concretes;
+using MediaService.Src.Application.Commands.Concretes;
 using MediaService.Src.Application.Commands.Interfaces;
 using MediaService.Src.Application.Interfaces;
 using MediaService.Src.Infrastructure.Configuration;
 using MediaService.Src.Infrastructure.Services;
-using MediaService.src.WebApi.Controllers.Filters;
+using MediaService.Src.WebApi.Controllers.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
