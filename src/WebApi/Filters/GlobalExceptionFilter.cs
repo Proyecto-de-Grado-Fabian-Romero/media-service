@@ -1,4 +1,4 @@
-namespace MediaService.src.WebApi.Controllers.Filters;
+namespace MediaService.Src.WebApi.Controllers.Filters;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

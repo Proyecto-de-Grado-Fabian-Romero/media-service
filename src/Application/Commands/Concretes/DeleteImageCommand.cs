@@ -1,4 +1,4 @@
-namespace MediaService.src.Application.Commands.Concretes;
+namespace MediaService.Src.Application.Commands.Concretes;
 
 using MediaService.Src.Application.Commands.Interfaces;
 using MediaService.Src.Application.Interfaces;

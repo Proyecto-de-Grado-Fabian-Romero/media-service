@@ -45,12 +45,13 @@ public class BackblazeB2StorageService : IStorageService
 
         var safeFolder = folder.Trim('/');
         var fileName = $"{safeFolder}/{Guid.NewGuid()}_{file.FileName}";
+        var fileUrl = $"https://f005.backblazeb2.com/file/{bucketKey}/{fileName}";
 
         var uploadedFile = await _b2Client.Files.Upload(fileBytes, fileName, bucket.BucketId);
 
         if (uploadedFile != null)
         {
-            return new { uploadedFile.FileId, FileName = fileName };
+            return new { uploadedFile.FileId, FileName = fileName, FileUrl = fileUrl };
         }
 
         return new { Message = "Upload failed" };
