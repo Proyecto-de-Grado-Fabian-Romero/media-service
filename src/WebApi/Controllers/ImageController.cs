@@ -1,8 +1,8 @@
 namespace MediaService.Src.WebApi.Controllers;
 
 using System.Threading.Tasks;
-using MediaService.Src.Application.Interfaces;
 using MediaService.Src.Application.Commands.Interfaces;
+using MediaService.Src.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
