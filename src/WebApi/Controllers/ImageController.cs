@@ -1,10 +1,10 @@
 namespace MediaService.Src.WebApi.Controllers;
 
-using Application.Interfaces;
+using System.Threading.Tasks;
+using MediaService.Src.Application.Interfaces;
 using MediaService.Src.Application.Commands.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]

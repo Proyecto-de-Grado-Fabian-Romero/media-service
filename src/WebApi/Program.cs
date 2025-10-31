@@ -12,8 +12,7 @@ builder
     .AddJsonFile(
         $"appsettings.{builder.Environment.EnvironmentName}.json",
         optional: true,
-        reloadOnChange: true
-    )
+        reloadOnChange: true)
     .AddEnvironmentVariables();
 
 // Add services to the container.
@@ -32,8 +31,7 @@ builder.Services.AddScoped<IGetImageUrlCommand, GetImageUrlCommand>();
 
 builder.Services.Configure<StorageSettings>(builder.Configuration.GetSection("StorageSettings"));
 builder.Services.Configure<BackBlazeCredentials>(
-    builder.Configuration.GetSection("BackBlazeCredentials")
-);
+    builder.Configuration.GetSection("BackBlazeCredentials"));
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 
