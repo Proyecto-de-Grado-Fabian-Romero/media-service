@@ -7,22 +7,21 @@ using MediaService.Src.WebApi.Controllers.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder
-    .Configuration.SetBasePath(builder.Environment.ContentRootPath)
+builder.Configuration
+    .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile(
         $"appsettings.{builder.Environment.EnvironmentName}.json",
         optional: true,
         reloadOnChange: true)
     .AddEnvironmentVariables();
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<GlobalExceptionFilter>();
 });
+
 builder.Services.AddScoped<IStorageService, BackblazeB2StorageService>();
 builder.Services.AddScoped<IUploadImageCommand, UploadImageCommand>();
 builder.Services.AddScoped<IDeleteImageCommand, DeleteImageCommand>();
@@ -61,11 +60,13 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-app.MapControllers();
+
+app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+app.MapControllers();
+
 app.Run();
